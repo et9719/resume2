@@ -2,16 +2,16 @@ function userInformationHTML(user) {
     return `
         <h2>${user.name}
             <span class="small-name">
-                (@<a href="${user.html_url} target="_blank">${user.login}</a>)
+                (@<a href="${user.html_url}" target="_blank">${user.login}</a>)
             </span>
         </h2>
         <div class="gh-content">
             <div class="gh-avatar">
-                <a href="${user.html_url} target="_blank">
-                    <img src="${user.avatar_url} width="80px" height="80px" alt="${user.login}" />
+                <a href="${user.html_url}" target="_blank">
+                    <img src="${user.avatar_url}" width="80" height="80" alt="${user.login}" />
                 </a>
             </div>
-            <p>Followers: ${user.followers} - Following ${user.following}<br> Repos: ${user.public_repos}</p>
+            <p>Followers: ${user.followers} - Following ${user.following} <br> Repos: ${user.public_repos}</p>
         </div>`;
 }
 
@@ -23,7 +23,7 @@ function repoInformationHTML(repos) {
     var listItemsHTML = repos.map(function(repo) {
         return `<li>
                     <a href="${repo.html_url}" target="_blank">${repo.name}</a>
-                </li>`
+                </li>`;
     });
 
     return `<div class="clearfix repo-list">
@@ -37,6 +37,8 @@ function repoInformationHTML(repos) {
 }
 
 function fetchGitHubInformation(event) {
+    $("#gh-user-data").html("");
+    $("#gh-repo-data").html("");
 
     var username = $("#gh-username").val();
     if (!username) {
@@ -53,7 +55,7 @@ function fetchGitHubInformation(event) {
         $.getJSON(`https://api.github.com/users/${username}`),
         $.getJSON(`https://api.github.com/users/${username}/repos`)
     ).then(
-        function(firstResponse, sedcondResponse) {
+        function(firstResponse, secondResponse) {
             var userData = firstResponse[0];
             var repoData = secondResponse[0];
             $("#gh-user-data").html(userInformationHTML(userData));
@@ -70,4 +72,6 @@ function fetchGitHubInformation(event) {
             }
         });
 }
+
+$(document).ready(fetchGitHubInformation);
         
